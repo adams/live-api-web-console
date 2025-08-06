@@ -20,6 +20,114 @@ We have provided several example applications on other branches of this reposito
 - [demos/GenWeather](https://github.com/google-gemini/multimodal-live-api-web-console/tree/demos/genweather)
 - [demos/GenList](https://github.com/google-gemini/multimodal-live-api-web-console/tree/demos/genlist)
 
+## Adding Custom Functionality
+
+The demo branches above follow a consistent pattern for adding domain-specific functionality to the Live API console. Here's the recommended approach:
+
+### 1. Create a Custom Main Component
+
+Create a dedicated component that replaces the default content in the main app area:
+
+```typescript
+// src/components/your-feature/YourFeature.tsx
+export function YourFeature() {
+  const { client, setConfig, connected, connect } = useLiveAPIContext();
+  // Your component logic here
+  return <div>Your custom UI</div>;
+}
+```
+
+### 2. Configure System Instructions
+
+Define the AI's behavior and role through system instructions:
+
+```typescript
+useEffect(() => {
+  setConfig({
+    model: "models/gemini-2.0-flash-exp",
+    systemInstruction: {
+      parts: [{
+        text: `You are a specialized assistant for [your domain].
+        - Define the AI's role and personality
+        - Specify response format and style
+        - Include domain-specific guidelines
+        - Set expectations for tool usage`
+      }]
+    },
+    // Add tools, generation config, etc.
+  });
+}, [setConfig]);
+```
+
+### 3. Add Tools (Optional)
+
+For complex functionality, define function declarations:
+
+```typescript
+const tools: Tool[] = [{
+  functionDeclarations: [{
+    name: "your_function_name",
+    description: "What this function does",
+    parameters: {
+      type: SchemaType.OBJECT,
+      properties: {
+        // Define parameters here
+      },
+      required: ["param1"]
+    }
+  }]
+}];
+```
+
+### 4. Implement Auto-Connection Pattern
+
+Most demos auto-connect when user input is ready:
+
+```typescript
+const handleStart = async () => {
+  if (userInputReady && !connected) {
+    await connect();
+    client.send([{ text: "Initial prompt based on user selections" }]);
+  }
+};
+```
+
+### 5. Replace Main App Content
+
+Update `App.tsx` to show your component:
+
+```typescript
+// In App.tsx main app area
+<div className="main-app-area">
+  {!connected ? (
+    <YourPreSessionComponent />
+  ) : (
+    <>
+      <YourFeature />
+      <video /* existing video element */ />
+    </>
+  )}
+</div>
+```
+
+### Best Practices
+
+1. **Single Responsibility**: Focus each implementation on one primary use case
+2. **Guided UX**: Provide clear UI that guides users through necessary setup/selections  
+3. **System Instructions First**: Always configure system instructions before connecting
+4. **State Management**: Use React state to manage user inputs and application flow
+5. **Error Handling**: Handle connection failures and validation gracefully
+6. **Tool Integration**: Use tools for complex, multi-step functionality
+7. **External APIs**: Integrate external services when your use case requires it
+
+### Examples from Demo Branches
+
+- **GenWeather**: Weather reports with character personalities, integrates OpenWeatherMap + Google Maps
+- **GenList**: Interactive checklist management with CRUD operations via tools
+- **GenExplainer**: Educational explanations with different teaching styles
+
+This pattern allows you to create focused, domain-specific applications that leverage the Live API's conversational and multimodal capabilities while providing users with a tailored experience.
+
 ## Example
 
 Below is an example of an entire application that will use Google Search grounding and then render graphs using [vega-embed](https://github.com/vega/vega-embed):
