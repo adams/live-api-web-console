@@ -14,6 +14,11 @@ This implementation uses **individual JPEG image snapshots** sent to the Gemini 
 - **Method**: Canvas-based frame capture from live video stream
 - **Transmission**: Each frame sent as separate `sendRealtimeInput()` call
 
+**Audio Synchronization:**
+- **Audio Rate**: 10 chunks/second (100ms intervals) - aligned with video transmission
+- **Buffer Size**: 1,600 samples at 16kHz sample rate
+- **Previous**: 8 chunks/second (125ms intervals) with 2,048 sample buffer
+
 **Code Location**: `src/components/control-tray/ControlTray.tsx` - `sendVideoFrame()` function
 
 ### Alternative: Native Video Streaming
