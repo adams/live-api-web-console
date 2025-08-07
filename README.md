@@ -10,7 +10,7 @@ This implementation uses **individual JPEG image snapshots** sent to the Gemini 
 **Technical Details:**
 - **Frame Rate**: 10 FPS (100ms intervals) - upgraded from 0.5 FPS → 5 FPS → 10 FPS
 - **Format**: Base64-encoded JPEG images (`image/jpeg`)
-- **Resolution**: 25% of original video dimensions for bandwidth optimization
+- **Resolution**: 50% of original video dimensions - upgraded from 25% for better detail analysis
 - **Method**: Canvas-based frame capture from live video stream
 - **Transmission**: Each frame sent as separate `sendRealtimeInput()` call
 
