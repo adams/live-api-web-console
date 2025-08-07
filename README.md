@@ -8,7 +8,7 @@ This repository contains a react-based starter app for using the [Live API](<[ht
 This implementation uses **individual JPEG image snapshots** sent to the Gemini Live API rather than native video streaming:
 
 **Technical Details:**
-- **Frame Rate**: 5 FPS (200ms intervals) - upgraded from 0.5 FPS
+- **Frame Rate**: 10 FPS (100ms intervals) - upgraded from 0.5 FPS → 5 FPS → 10 FPS
 - **Format**: Base64-encoded JPEG images (`image/jpeg`)
 - **Resolution**: 25% of original video dimensions for bandwidth optimization
 - **Method**: Canvas-based frame capture from live video stream
