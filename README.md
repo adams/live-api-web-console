@@ -2,6 +2,36 @@
 
 This repository contains a react-based starter app for using the [Live API](<[https://ai.google.dev/gemini-api](https://ai.google.dev/api/multimodal-live)>) over a websocket. It provides modules for streaming audio playback, recording user media such as from a microphone, webcam or screen capture as well as a unified log view to aid in development of your application.
 
+## Video Processing Implementation
+
+### Current Approach: Image Snapshots
+This implementation uses **individual JPEG image snapshots** sent to the Gemini Live API rather than native video streaming:
+
+**Technical Details:**
+- **Frame Rate**: 5 FPS (200ms intervals) - upgraded from 0.5 FPS
+- **Format**: Base64-encoded JPEG images (`image/jpeg`)
+- **Resolution**: 25% of original video dimensions for bandwidth optimization
+- **Method**: Canvas-based frame capture from live video stream
+- **Transmission**: Each frame sent as separate `sendRealtimeInput()` call
+
+**Code Location**: `src/components/control-tray/ControlTray.tsx` - `sendVideoFrame()` function
+
+### Alternative: Native Video Streaming
+The Gemini Live API **does support** native video streaming via WebSocket, which would offer:
+- Lower bandwidth (video compression vs individual JPEGs)
+- Smoother motion analysis for the LLM
+- Native temporal processing capabilities
+- Better performance for rapid motion analysis
+
+### Why Image Snapshots?
+Current implementation chosen for:
+- Simpler development and debugging
+- Precise control over frame timing and quality
+- Explicit bandwidth management
+- Easy integration with existing codebase
+
+**Trade-offs**: Higher bandwidth usage, discrete frame analysis vs smooth motion understanding
+
 [![Live API Demo](readme/thumbnail.png)](https://www.youtube.com/watch?v=J_q7JY1XxFE)
 
 Watch the demo of the Live API [here](https://www.youtube.com/watch?v=J_q7JY1XxFE).
