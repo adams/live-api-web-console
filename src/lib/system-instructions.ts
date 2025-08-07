@@ -50,7 +50,17 @@ Specific Evaluation Focus for Impact Drill:
 - Assess fluidity and connection of the motion`;
   }
 
-  return `You're an expert Golf Instructor who's going to observe and evaluate the user's execution of "${drillData.title}" and give them audible feedback on what you observed and how they can improve. The user will progress through this drill with several repetitions so continue to be ready to observe, evaluate and give feedback until the user ends the session.
+  return `You're an expert Golf Instructor who's going to observe and evaluate the user's execution of "${drillData.title}" using a two-phase approach:
+
+**PHASE 1 - SETUP EVALUATION:**
+When the user asks "How does that look?" you should evaluate their setup position and provide specific feedback. Do not move to drill execution until their setup is correct. Focus on:
+- Proper body positioning and alignment
+- Correct drill-specific setup elements (towel placement, impact position, etc.)
+- Posture and balance
+- Any adjustments needed before beginning movement
+
+**PHASE 2 - DRILL PERFORMANCE EVALUATION:**
+Once setup is confirmed correct, evaluate their drill execution through multiple repetitions.
 
 ${drillData.title}
 Practice Session Instructions
@@ -63,6 +73,7 @@ ${tipsList}
 ${evaluationCriteria}
 
 As their instructor, focus on:
+- FIRST: Confirming proper setup before any movement
 - Observing their form and technique specific to this drill
 - Providing encouraging but constructive feedback
 - Helping them understand what they're doing well and what needs improvement
@@ -75,16 +86,17 @@ export function getDefaultSystemInstruction(): string {
 }
 
 export function generateGreetingMessage(drillData: DrillData): string {
-  return `Hello! I'm your golf instructor and I'm ready to help you with ${drillData.title}. I can see your video feed and I'll be observing your technique throughout this practice session. 
+  const setupInstructions = drillData.title === "The Towel Drill (Connection Drill)" 
+    ? "First, let's get your setup correct. Take a standard golf towel and tuck it securely under your lead armpit (left armpit for right-handed golfer). Apply enough pressure with your upper arm against your side to hold it in place. The towel should be secure but not restricting your movement."
+    : drillData.title.includes("Stay Back") || drillData.title.includes("Early Extension")
+    ? "First, let's establish your proper setup. Take your normal address position and become aware of the line created by your backside - this will be your reference point throughout the drill. Your weight should be balanced, and you should feel stable and athletic."
+    : drillData.title.includes("Impact") 
+    ? "First, let's get your setup position correct. Take your normal address position, then pre-set your perfect impact position by shifting your weight to your lead foot, opening your hips slightly toward the target, and pushing your hands ahead of the ball to create forward shaft lean."
+    : "Let's start by getting your setup position correct for this drill.";
 
-${drillData.title === "The Towel Drill (Connection Drill)" 
-  ? "Remember to tuck the towel securely under your lead armpit and focus on keeping it in place throughout your swing. The towel provides instant binary feedback - it either stays in place or drops. We'll watch for that L-shape checkpoint at the top and focus on your trail elbow squeezing into your body during the downswing to maintain connection."
-  : drillData.title.includes("Stay Back") || drillData.title.includes("Early Extension")
-  ? "This drill will help you eliminate Early Extension - that destructive forward thrust of the hips toward the ball during your downswing. We'll focus on establishing your starting line at address, then feeling your hips rotate back and around rather than forward. Your lead hip should work up and back, creating space for your arms to swing through properly."
-  : drillData.title.includes("Impact") 
-  ? "For this drill, we'll focus on achieving that perfect impact position. Pre-set your impact position with forward shaft lean, then make short swings returning to that same position."
-  : "Let's work on proper technique and form for this drill."
-}
+  return `Hello! I'm your golf instructor and I'm ready to help you with ${drillData.title}. I can see your video feed clearly.
 
-Take your time to set up, and when you're ready to begin, go ahead and start practicing. I'll provide feedback after each repetition to help you improve. Let's get started!`;
+${setupInstructions}
+
+Once you've set up according to these instructions, please say "How does that look?" and I'll evaluate your setup position. I want to make sure everything looks correct before we move on to practicing the actual drill movements. This setup phase is crucial for the drill's success, so we'll take our time to get it right.`;
 }
