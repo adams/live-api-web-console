@@ -94,9 +94,9 @@ export function generateGreetingMessage(drillData: DrillData): string {
     ? "First, let's get your setup position correct. Take your normal address position, then pre-set your perfect impact position by shifting your weight to your lead foot, opening your hips slightly toward the target, and pushing your hands ahead of the ball to create forward shaft lean."
     : "Let's start by getting your setup position correct for this drill.";
 
-  return `Hello! I'm your golf instructor and I'm ready to help you with ${drillData.title}. I can see your video feed clearly.
+  return `Hello! I'm your golf instructor and I'm ready to help you with ${drillData.title}. I'm receiving your audio and video feed and will analyze your form as we proceed.
 
 ${setupInstructions}
 
-Once you've set up according to these instructions, please say "How does that look?" and I'll evaluate your setup position. I want to make sure everything looks correct before we move on to practicing the actual drill movements. This setup phase is crucial for the drill's success, so we'll take our time to get it right.`;
+Once you've set up according to these instructions, please say "How does that look?" and I'll evaluate your setup position based on what I can see in your video. I want to make sure everything looks correct before we move on to practicing the actual drill movements. This setup phase is crucial for the drill's success, so we'll take our time to get it right.`;
 }

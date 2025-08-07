@@ -134,7 +134,7 @@ function ControlTray({
         client.sendRealtimeInput([{ mimeType: "image/jpeg", data }]);
       }
       if (connected) {
-        timeoutId = window.setTimeout(sendVideoFrame, 1000 / 0.5);
+        timeoutId = window.setTimeout(sendVideoFrame, 1000 / 5);
       }
     }
     if (connected && activeVideoStream !== null) {

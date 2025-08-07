@@ -39,9 +39,12 @@ export function DrillProvider({ children }: DrillProviderProps) {
   // Send greeting message when session is set up
   useEffect(() => {
     const onSetupComplete = () => {
-      const greetingMessage = generateGreetingMessage(currentDrill);
-      console.log('🎯 Sending drill greeting:', greetingMessage);
-      client.send([{ text: greetingMessage }]);
+      // Wait 3 seconds to ensure video frames are being transmitted before sending greeting
+      setTimeout(() => {
+        const greetingMessage = generateGreetingMessage(currentDrill);
+        console.log('🎯 Sending drill greeting after video transmission delay:', greetingMessage);
+        client.send([{ text: greetingMessage }]);
+      }, 3000);
     };
 
     client.on('setupcomplete', onSetupComplete);
