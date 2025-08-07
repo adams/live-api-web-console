@@ -9,6 +9,8 @@ import "./settings-dialog.scss";
 import { useLiveAPIContext } from "../../contexts/LiveAPIContext";
 import VoiceSelector from "./VoiceSelector";
 import ResponseModalitySelector from "./ResponseModalitySelector";
+import TurnCoverageSelector from "./TurnCoverageSelector";
+import ProactiveAudioSelector from "./ProactiveAudioSelector";
 import { FunctionDeclaration, LiveConnectConfig, Tool } from "@google/genai";
 
 type FunctionDeclarationsTool = Tool & {
@@ -112,6 +114,11 @@ export default function SettingsDialog() {
           <div className="mode-selectors">
             <ResponseModalitySelector />
             <VoiceSelector />
+          </div>
+          
+          <div className="advanced-settings">
+            <TurnCoverageSelector />
+            <ProactiveAudioSelector />
           </div>
 
           <h3>System Instructions</h3>
