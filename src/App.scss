@@ -154,6 +154,14 @@ body {
     height: 100%;
   }
 
+  .rep-logger-overlay {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    pointer-events: auto;
+  }
+
   .function-call {
     position: absolute;
     top: 0;

@@ -17,10 +17,13 @@
 import { useRef, useState } from "react";
 import "./App.scss";
 import { LiveAPIProvider } from "./contexts/LiveAPIContext";
+import { RepSessionProvider } from "./components/rep-session/RepSessionProvider";
+import { useRepSession } from "./contexts/RepSessionContext";
 import SidePanel from "./components/side-panel/SidePanel";
 import { Altair } from "./components/altair/Altair";
 import ControlTray from "./components/control-tray/ControlTray";
 import RightSidebar from "./components/right-sidebar/RightSidebar";
+import RepLogger from "./components/rep-logger/RepLogger";
 import cn from "classnames";
 import { LiveClientOptions } from "./types";
 
@@ -33,72 +36,83 @@ const apiOptions: LiveClientOptions = {
   apiKey: API_KEY,
 };
 
-function App() {
-  // this video reference is used for displaying the active stream, whether that is the webcam or screen capture
-  // feel free to style as you see fit
+function MainContent() {
   const videoRef = useRef<HTMLVideoElement>(null);
-  // either the screen capture, the video or null, if null we hide it
   const [videoStream, setVideoStream] = useState<MediaStream | null>(null);
+  const { repLog } = useRepSession();
 
+  return (
+    <div className="streaming-console">
+      <SidePanel />
+      <main>
+        <div className="main-app-area">
+          {/* APP goes here */}
+          <Altair />
+          
+          {/* Floating RepLogger */}
+          <div className="rep-logger-overlay">
+            <RepLogger entries={repLog} />
+          </div>
+          
+          {/* Instructional message when camera/mic not ready */}
+          {!videoStream && (
+            <div className="session-setup-message">
+              <div className="setup-content">
+                <div className="setup-icon">
+                  <span className="material-symbols-outlined">videocam</span>
+                  <span className="material-symbols-outlined">mic</span>
+                </div>
+                <h2>Ready to Start Your Rep Session?</h2>
+                <p>Enable your camera below to begin drill tracking</p>
+                <div className="setup-steps">
+                  <div className="step">
+                    <span className="step-number">1</span>
+                    <span>Turn on your camera</span>
+                  </div>
+                  <div className="step">
+                    <span className="step-number">2</span>
+                    <span>Optional: Enable microphone</span>
+                  </div>
+                  <div className="step">
+                    <span className="step-number">3</span>
+                    <span>Click "Start Session"</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          <video
+            className={cn("stream", {
+              hidden: !videoRef.current || !videoStream,
+            })}
+            ref={videoRef}
+            autoPlay
+            playsInline
+          />
+        </div>
+
+        <ControlTray
+          videoRef={videoRef}
+          supportsVideo={true}
+          onVideoStreamChange={setVideoStream}
+          enableEditingSettings={true}
+        >
+          {/* put your own buttons here */}
+        </ControlTray>
+      </main>
+      <RightSidebar />
+    </div>
+  );
+}
+
+function App() {
   return (
     <div className="App">
       <LiveAPIProvider options={apiOptions}>
-        <div className="streaming-console">
-          <SidePanel />
-          <main>
-            <div className="main-app-area">
-              {/* APP goes here */}
-              <Altair />
-              
-              {/* Instructional message when camera/mic not ready */}
-              {!videoStream && (
-                <div className="session-setup-message">
-                  <div className="setup-content">
-                    <div className="setup-icon">
-                      <span className="material-symbols-outlined">videocam</span>
-                      <span className="material-symbols-outlined">mic</span>
-                    </div>
-                    <h2>Ready to Start Your Golf Session?</h2>
-                    <p>Enable your camera and microphone below to begin</p>
-                    <div className="setup-steps">
-                      <div className="step">
-                        <span className="step-number">1</span>
-                        <span>Turn on your camera</span>
-                      </div>
-                      <div className="step">
-                        <span className="step-number">2</span>
-                        <span>Enable your microphone</span>
-                      </div>
-                      <div className="step">
-                        <span className="step-number">3</span>
-                        <span>Click "Start Session"</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-              
-              <video
-                className={cn("stream", {
-                  hidden: !videoRef.current || !videoStream,
-                })}
-                ref={videoRef}
-                autoPlay
-                playsInline
-              />
-            </div>
-
-            <ControlTray
-              videoRef={videoRef}
-              supportsVideo={true}
-              onVideoStreamChange={setVideoStream}
-              enableEditingSettings={true}
-            >
-              {/* put your own buttons here */}
-            </ControlTray>
-          </main>
-          <RightSidebar />
-        </div>
+        <RepSessionProvider>
+          <MainContent />
+        </RepSessionProvider>
       </LiveAPIProvider>
     </div>
   );

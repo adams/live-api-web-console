@@ -18,6 +18,7 @@ import React from "react";
 import "./right-sidebar.scss";
 
 const RightSidebar: React.FC = () => {
+  
   // Hardcoded Towel Drill content
   const sessionTitle = "The Towel Drill";
   const videoId = "vGJCGo22qbs";
@@ -34,7 +35,7 @@ const RightSidebar: React.FC = () => {
 
   return (
     <div className="right-sidebar">
-      <div className="sidebar-content">
+      <div className="sidebar-content">        
         <div className="session-header">
           <h2>{sessionTitle}</h2>
           <p className="session-subtitle">Practice Session Instructions</p>
