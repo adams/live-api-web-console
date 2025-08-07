@@ -70,8 +70,8 @@ function ControlTray({
   const [audioRecorder] = useState(() => new AudioRecorder());
   const [muted, setMuted] = useState(true);
   
-  // Check if both camera and mic are ready for session
-  const isReadyForSession = webcam.isStreaming && !muted;
+  // Check if camera is ready for session (mic optional for golf detection)
+  const isReadyForSession = webcam.isStreaming;
   const renderCanvasRef = useRef<HTMLCanvasElement>(null);
   const connectButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -178,10 +178,14 @@ function ControlTray({
     <section className="control-tray">
       <canvas style={{ display: "none" }} ref={renderCanvasRef} />
       <nav className={cn("actions-nav")}>
+        <div className="action-button no-action outlined">
+          <AudioPulse volume={volume} active={connected && !muted} hover={false} />
+        </div>
+
         <button
           className={cn("action-button mic-button", { 
-            "muted-active": connected && muted,
-            "active": connected && !muted 
+            "muted": muted,
+            "active": !muted 
           })}
           onClick={() => setMuted(!muted)}
           title={muted ? "Enable microphone" : "Disable microphone"}
@@ -193,18 +197,25 @@ function ControlTray({
           )}
         </button>
 
-        <div className="action-button no-action outlined">
-          <AudioPulse volume={volume} active={connected} hover={false} />
-        </div>
-
         {supportsVideo && (
-          <MediaStreamButton
-            isStreaming={webcam.isStreaming}
-            start={toggleWebcam}
-            stop={toggleWebcam}
-            onIcon="videocam"
-            offIcon="videocam_off"
-          />
+          <button 
+            className={cn("action-button video-button", {
+              "active": webcam.isStreaming,
+              "inactive": !webcam.isStreaming
+            })}
+            onClick={webcam.isStreaming ? () => {
+              webcam.stop();
+              setActiveVideoStream(null);
+              onVideoStreamChange(null);
+            } : toggleWebcam}
+            title={webcam.isStreaming ? "Disable camera" : "Enable camera"}
+          >
+            {webcam.isStreaming ? (
+              <span className="material-symbols-outlined filled">videocam</span>
+            ) : (
+              <span className="material-symbols-outlined filled">videocam_off</span>
+            )}
+          </button>
         )}
         {children}
       </nav>
@@ -219,7 +230,7 @@ function ControlTray({
             })}
             onClick={connected ? handleDisconnect : handleConnect}
             disabled={!connected && !isReadyForSession}
-            title={!connected && !isReadyForSession ? "Enable camera and microphone to start session" : ""}
+            title={!connected && !isReadyForSession ? "Enable camera to start session" : ""}
           >
             <span className="session-button-text">
               {connected ? "End Session" : "Start Session"}
