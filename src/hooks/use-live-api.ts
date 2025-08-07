@@ -21,6 +21,7 @@ import { AudioStreamer } from "../lib/audio-streamer";
 import { audioContext } from "../lib/utils";
 import VolMeterWorket from "../lib/worklets/vol-meter";
 import { LiveConnectConfig } from "@google/genai";
+import { loadSettings, saveSettings } from "../lib/settings-storage";
 
 export type UseLiveAPIResults = {
   client: GenAILiveClient;
@@ -37,11 +38,47 @@ export type UseLiveAPIResults = {
 export function useLiveAPI(options: LiveClientOptions): UseLiveAPIResults {
   const client = useMemo(() => new GenAILiveClient(options), [options]);
   const audioStreamerRef = useRef<AudioStreamer | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  const [model, setModel] = useState<string>("models/gemini-2.0-flash-exp");
-  const [config, setConfig] = useState<LiveConnectConfig>({});
+  // Initialize with default values, will be overridden by loaded settings
+  const [model, setModelState] = useState<string>("models/gemini-2.0-flash-exp");
+  const [config, setConfigState] = useState<LiveConnectConfig>({});
   const [connected, setConnected] = useState(false);
   const [volume, setVolume] = useState(0);
+
+  // Refs to track current values for saving
+  const modelRef = useRef(model);
+  const configRef = useRef(config);
+  
+  // Update refs when state changes
+  useEffect(() => { modelRef.current = model; }, [model]);
+  useEffect(() => { configRef.current = config; }, [config]);
+
+  // Load settings from localStorage on initialization
+  useEffect(() => {
+    const loadedSettings = loadSettings();
+    if (loadedSettings) {
+      setModelState(loadedSettings.model);
+      setConfigState(loadedSettings.config);
+    }
+    setIsInitialized(true);
+  }, []);
+
+  // Save to localStorage whenever settings change (after initialization)
+  useEffect(() => {
+    if (isInitialized) {
+      saveSettings({ model: modelRef.current, config: configRef.current });
+    }
+  }, [model, config, isInitialized]);
+
+  // Simple setters without localStorage logic (handled by the effect above)
+  const setModel = useCallback((newModel: string) => {
+    setModelState(newModel);
+  }, []);
+
+  const setConfig = useCallback((newConfig: LiveConnectConfig) => {
+    setConfigState(newConfig);
+  }, []);
 
   // register audio for streaming server -> speakers
   useEffect(() => {

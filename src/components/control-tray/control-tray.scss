@@ -92,6 +92,9 @@
 }
 
 .connect-toggle {
+  min-width: 120px; // Make room for text
+  padding: 0 16px; // Add horizontal padding for text
+  
   &:focus {
     border: 2px solid var(--Neutral-20);
     outline: 2px solid var(--Neutral-80);
@@ -100,6 +103,35 @@
   &:not(.connected) {
     background-color: var(--Blue-500);
     color: var(--Neutral-5);
+  }
+  
+  .session-button-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  
+  &.disabled {
+    background-color: var(--Neutral-30) !important;
+    color: var(--Neutral-50) !important;
+    cursor: not-allowed;
+    opacity: 0.6;
+    
+    &:hover {
+      background-color: var(--Neutral-30) !important;
+    }
+  }
+  
+  &:disabled {
+    background-color: var(--Neutral-30) !important;
+    color: var(--Neutral-50) !important;
+    cursor: not-allowed;
+    opacity: 0.6;
+    
+    &:hover {
+      background-color: var(--Neutral-30) !important;
+    }
   }
 }
 
@@ -113,6 +145,7 @@
   align-items: flex-start;
   gap: 8px;
   padding-bottom: 18px;
+  z-index: 10;
 
   .disabled .action-button,
   .action-button.disabled {

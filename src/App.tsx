@@ -20,6 +20,7 @@ import { LiveAPIProvider } from "./contexts/LiveAPIContext";
 import SidePanel from "./components/side-panel/SidePanel";
 import { Altair } from "./components/altair/Altair";
 import ControlTray from "./components/control-tray/ControlTray";
+import RightSidebar from "./components/right-sidebar/RightSidebar";
 import cn from "classnames";
 import { LiveClientOptions } from "./types";
 
@@ -48,6 +49,35 @@ function App() {
             <div className="main-app-area">
               {/* APP goes here */}
               <Altair />
+              
+              {/* Instructional message when camera/mic not ready */}
+              {!videoStream && (
+                <div className="session-setup-message">
+                  <div className="setup-content">
+                    <div className="setup-icon">
+                      <span className="material-symbols-outlined">videocam</span>
+                      <span className="material-symbols-outlined">mic</span>
+                    </div>
+                    <h2>Ready to Start Your Golf Session?</h2>
+                    <p>Enable your camera and microphone below to begin</p>
+                    <div className="setup-steps">
+                      <div className="step">
+                        <span className="step-number">1</span>
+                        <span>Turn on your camera</span>
+                      </div>
+                      <div className="step">
+                        <span className="step-number">2</span>
+                        <span>Enable your microphone</span>
+                      </div>
+                      <div className="step">
+                        <span className="step-number">3</span>
+                        <span>Click "Start Session"</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
               <video
                 className={cn("stream", {
                   hidden: !videoRef.current || !videoStream,
@@ -67,6 +97,7 @@ function App() {
               {/* put your own buttons here */}
             </ControlTray>
           </main>
+          <RightSidebar />
         </div>
       </LiveAPIProvider>
     </div>

@@ -13,18 +13,19 @@ const voiceOptions = [
 export default function VoiceSelector() {
   const { config, setConfig } = useLiveAPIContext();
 
-  useEffect(() => {
-    const voiceName =
-      config.speechConfig?.voiceConfig?.prebuiltVoiceConfig?.voiceName ||
-      "Atari02";
-    const voiceOption = { value: voiceName, label: voiceName };
-    setSelectedOption(voiceOption);
-  }, [config]);
-
   const [selectedOption, setSelectedOption] = useState<{
     value: string;
     label: string;
-  } | null>(voiceOptions[5]);
+  } | null>(voiceOptions[0]);
+
+  useEffect(() => {
+    const voiceName =
+      config.speechConfig?.voiceConfig?.prebuiltVoiceConfig?.voiceName;
+    if (voiceName && voiceName !== selectedOption?.value) {
+      const voiceOption = voiceOptions.find(opt => opt.value === voiceName) || { value: voiceName, label: voiceName };
+      setSelectedOption(voiceOption);
+    }
+  }, [config.speechConfig?.voiceConfig?.prebuiltVoiceConfig?.voiceName, selectedOption?.value]);
 
   const updateConfig = useCallback(
     (voiceName: string) => {
@@ -68,7 +69,6 @@ export default function VoiceSelector() {
           }),
         }}
         value={selectedOption}
-        defaultValue={selectedOption}
         options={voiceOptions}
         onChange={(e) => {
           setSelectedOption(e);

@@ -18,8 +18,6 @@ import cn from "classnames";
 
 import { memo, ReactNode, RefObject, useEffect, useRef, useState } from "react";
 import { useLiveAPIContext } from "../../contexts/LiveAPIContext";
-import { UseMediaStreamResult } from "../../hooks/use-media-stream-mux";
-import { useScreenCapture } from "../../hooks/use-screen-capture";
 import { useWebcam } from "../../hooks/use-webcam";
 import { AudioRecorder } from "../../lib/audio-recorder";
 import AudioPulse from "../audio-pulse/AudioPulse";
@@ -65,13 +63,15 @@ function ControlTray({
   supportsVideo,
   enableEditingSettings,
 }: ControlTrayProps) {
-  const videoStreams = [useWebcam(), useScreenCapture()];
+  const webcam = useWebcam();
   const [activeVideoStream, setActiveVideoStream] =
     useState<MediaStream | null>(null);
-  const [webcam, screenCapture] = videoStreams;
   const [inVolume, setInVolume] = useState(0);
   const [audioRecorder] = useState(() => new AudioRecorder());
-  const [muted, setMuted] = useState(false);
+  const [muted, setMuted] = useState(true);
+  
+  // Check if both camera and mic are ready for session
+  const isReadyForSession = webcam.isStreaming && !muted;
   const renderCanvasRef = useRef<HTMLCanvasElement>(null);
   const connectButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -145,27 +145,46 @@ function ControlTray({
     };
   }, [connected, activeVideoStream, client, videoRef]);
 
-  //handler for swapping from one video-stream to the next
-  const changeStreams = (next?: UseMediaStreamResult) => async () => {
-    if (next) {
-      const mediaStream = await next.start();
-      setActiveVideoStream(mediaStream);
-      onVideoStreamChange(mediaStream);
-    } else {
+  // Handler for starting/stopping webcam
+  const toggleWebcam = async () => {
+    if (webcam.isStreaming) {
+      webcam.stop();
       setActiveVideoStream(null);
       onVideoStreamChange(null);
+    } else {
+      const mediaStream = await webcam.start();
+      setActiveVideoStream(mediaStream);
+      onVideoStreamChange(mediaStream);
     }
-
-    videoStreams.filter((msr) => msr !== next).forEach((msr) => msr.stop());
+  };
+  
+  // Custom connect/disconnect handlers
+  const handleConnect = async () => {
+    if (isReadyForSession) {
+      await connect();
+    }
+  };
+  
+  const handleDisconnect = async () => {
+    await disconnect();
+    // Turn off camera and mic when session ends
+    setMuted(true);
+    webcam.stop();
+    setActiveVideoStream(null);
+    onVideoStreamChange(null);
   };
 
   return (
     <section className="control-tray">
       <canvas style={{ display: "none" }} ref={renderCanvasRef} />
-      <nav className={cn("actions-nav", { disabled: !connected })}>
+      <nav className={cn("actions-nav")}>
         <button
-          className={cn("action-button mic-button")}
+          className={cn("action-button mic-button", { 
+            "muted-active": connected && muted,
+            "active": connected && !muted 
+          })}
           onClick={() => setMuted(!muted)}
+          title={muted ? "Enable microphone" : "Disable microphone"}
         >
           {!muted ? (
             <span className="material-symbols-outlined filled">mic</span>
@@ -179,22 +198,13 @@ function ControlTray({
         </div>
 
         {supportsVideo && (
-          <>
-            <MediaStreamButton
-              isStreaming={screenCapture.isStreaming}
-              start={changeStreams(screenCapture)}
-              stop={changeStreams()}
-              onIcon="cancel_presentation"
-              offIcon="present_to_all"
-            />
-            <MediaStreamButton
-              isStreaming={webcam.isStreaming}
-              start={changeStreams(webcam)}
-              stop={changeStreams()}
-              onIcon="videocam_off"
-              offIcon="videocam"
-            />
-          </>
+          <MediaStreamButton
+            isStreaming={webcam.isStreaming}
+            start={toggleWebcam}
+            stop={toggleWebcam}
+            onIcon="videocam"
+            offIcon="videocam_off"
+          />
         )}
         {children}
       </nav>
@@ -203,11 +213,16 @@ function ControlTray({
         <div className="connection-button-container">
           <button
             ref={connectButtonRef}
-            className={cn("action-button connect-toggle", { connected })}
-            onClick={connected ? disconnect : connect}
+            className={cn("action-button connect-toggle", { 
+              connected,
+              disabled: !connected && !isReadyForSession
+            })}
+            onClick={connected ? handleDisconnect : handleConnect}
+            disabled={!connected && !isReadyForSession}
+            title={!connected && !isReadyForSession ? "Enable camera and microphone to start session" : ""}
           >
-            <span className="material-symbols-outlined filled">
-              {connected ? "pause" : "play_arrow"}
+            <span className="session-button-text">
+              {connected ? "End Session" : "Start Session"}
             </span>
           </button>
         </div>

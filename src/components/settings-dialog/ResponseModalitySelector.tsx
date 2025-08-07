@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Select from "react-select";
 import { useLiveAPIContext } from "../../contexts/LiveAPIContext";
 import { Modality } from "@google/genai";
@@ -15,6 +15,20 @@ export default function ResponseModalitySelector() {
     value: string;
     label: string;
   } | null>(responseOptions[0]);
+
+  // Sync with loaded config
+  useEffect(() => {
+    if (config.responseModalities && config.responseModalities.length > 0) {
+      const modality = config.responseModalities[0];
+      const modalityValue = modality === Modality.AUDIO ? "audio" : "text";
+      if (modalityValue !== selectedOption?.value) {
+        const option = responseOptions.find(opt => opt.value === modalityValue);
+        if (option) {
+          setSelectedOption(option);
+        }
+      }
+    }
+  }, [config.responseModalities, selectedOption?.value]);
 
   const updateConfig = useCallback(
     (modality: "audio" | "text") => {
@@ -53,7 +67,7 @@ export default function ResponseModalitySelector() {
               : undefined,
           }),
         }}
-        defaultValue={selectedOption}
+        value={selectedOption}
         options={responseOptions}
         onChange={(e) => {
           setSelectedOption(e);
