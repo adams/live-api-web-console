@@ -8,16 +8,16 @@ This repository contains a react-based starter app for using the [Live API](<[ht
 This implementation uses **individual JPEG image snapshots** sent to the Gemini Live API rather than native video streaming:
 
 **Technical Details:**
-- **Frame Rate**: 10 FPS (100ms intervals) - upgraded from 0.5 FPS → 5 FPS → 10 FPS
+- **Frame Rate**: 2 FPS (500ms intervals) - balanced for analysis without log spam
 - **Format**: Base64-encoded JPEG images (`image/jpeg`)
-- **Resolution**: 50% of original video dimensions - upgraded from 25% for better detail analysis
+- **Resolution**: 50% of original video dimensions for detailed analysis
 - **Method**: Canvas-based frame capture from live video stream
 - **Transmission**: Each frame sent as separate `sendRealtimeInput()` call
 
 **Audio Synchronization:**
-- **Audio Rate**: 10 chunks/second (100ms intervals) - aligned with video transmission
-- **Buffer Size**: 1,600 samples at 16kHz sample rate
-- **Previous**: 8 chunks/second (125ms intervals) with 2,048 sample buffer
+- **Audio Rate**: 2 chunks/second (500ms intervals) - aligned with video transmission
+- **Buffer Size**: 8,000 samples at 16kHz sample rate
+- **Evolution**: 0.5 FPS → 5 FPS → 10 FPS → 2 FPS (optimized for usability)
 
 **Code Location**: `src/components/control-tray/ControlTray.tsx` - `sendVideoFrame()` function
 

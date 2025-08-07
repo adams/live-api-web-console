@@ -17,9 +17,9 @@
 const AudioRecordingWorklet = `
 class AudioProcessingWorklet extends AudioWorkletProcessor {
 
-  // send and clear buffer every 1600 samples, 
-  // which at 16khz is 10 times a second (100ms intervals) - aligned with video
-  buffer = new Int16Array(1600);
+  // send and clear buffer every 8000 samples, 
+  // which at 16khz is 2 times a second (500ms intervals) - aligned with 2 FPS video
+  buffer = new Int16Array(8000);
 
   // current write index
   bufferWriteIndex = 0;
