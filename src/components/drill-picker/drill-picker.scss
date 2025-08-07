@@ -1,0 +1,68 @@
+.drill-picker {
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.drill-picker-label {
+  display: block;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #ffffff !important;
+  margin-bottom: 0.5rem;
+}
+
+.drill-picker-select {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: bold;
+  background: #ffffff !important;
+  border: 2px solid #ccc !important;
+  border-radius: 4px;
+  color: #000000 !important;
+  cursor: pointer;
+
+  &:hover {
+    border-color: #007bff !important;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #007bff !important;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+
+  option {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-weight: bold;
+  }
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: light) {
+  .drill-picker {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .drill-picker-label {
+    color: #333333;
+  }
+
+  .drill-picker-select {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.2);
+    color: #333333;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.08);
+      border-color: rgba(0, 0, 0, 0.3);
+    }
+
+    option {
+      background: #ffffff;
+      color: #333333;
+    }
+  }
+}

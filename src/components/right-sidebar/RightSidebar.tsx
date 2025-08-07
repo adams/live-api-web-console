@@ -16,25 +16,19 @@
 
 import React from "react";
 import "./right-sidebar.scss";
+import { useDrill } from "../../contexts/DrillContext";
+import DrillPicker from "../drill-picker/DrillPicker";
 
 const RightSidebar: React.FC = () => {
-  // Hardcoded Towel Drill content
-  const sessionTitle = "The Towel Drill";
-  const videoId = "vGJCGo22qbs";
-  
-  const sessionInstructions = [
-    "Place a towel under your trailing armpit before taking your grip",
-    "The goal is to keep the towel in place throughout your swing",
-    "This drill helps maintain proper connection between your arms and body",
-    "Focus on rotating your body rather than lifting your arms independently",
-    "Start with slow, controlled swings to feel the proper motion",
-    "If the towel falls, you're likely disconnecting your arms from your body",
-    "Practice this drill regularly to improve swing consistency and power"
-  ];
+  // Using drill context to get current drill data
+  const { currentDrill } = useDrill();
+  const { title: sessionTitle, videoId, instructions: sessionInstructions, tips } = currentDrill;
 
   return (
     <div className="right-sidebar">
       <div className="sidebar-content">
+        <DrillPicker />
+        
         <div className="session-header">
           <h2>{sessionTitle}</h2>
           <p className="session-subtitle">Practice Session Instructions</p>
@@ -68,10 +62,9 @@ const RightSidebar: React.FC = () => {
         <div className="tips-section">
           <h3>Tips for Success</h3>
           <ul className="tips-list">
-            <li>Start with practice swings without a ball</li>
-            <li>Focus on the feeling of connection</li>
-            <li>Ask the AI to watch for towel drops during your swings</li>
-            <li>Record yourself to review your progress</li>
+            {tips.map((tip, index) => (
+              <li key={index}>{tip}</li>
+            ))}
           </ul>
         </div>
       </div>
