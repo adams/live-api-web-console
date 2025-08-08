@@ -39,6 +39,20 @@ Specific Evaluation Focus for The Stay Back Hip Rotation Drill:
   • POOR: Hips still move forward off starting line toward ball, golfer feels crowded/stuck at impact
 - Ball Flight Impact: Note elimination of blocks, pushes, and hooks associated with Early Extension
 - Down-the-Line View: This drill is best evaluated from down-the-line camera angle to see hip movement clearly`;
+  } else if (drillData.title.includes('Lead Leg') || drillData.title.includes('Extension')) {
+    evaluationCriteria = `
+Specific Evaluation Focus for Lead Leg Extension & Rotation Drill:
+- Kinematic Sequence: Monitor the correct sequencing where lower body drives the swing
+- Lead Leg Motion: Watch for flexed position in early downswing transitioning to straight/nearly straight at impact
+- Timing Assessment: Look for extension beginning when hands reach hip height in downswing
+- Hip Rotation: Observe automatic hip opening created by lead leg extension
+- Ground Force Usage: Note the athletic push off the lead leg creating power
+- Execution Categories:
+  • GREAT: Lead leg moves from flexed to straight at impact, hips visibly open, compressed solid strike, tall balanced finish
+  • OK: Attempted extension but timing slightly off (early/late), contact improves but may be slightly thin
+  • POOR: Lateral hip slide instead of rotation, or knee stays flexed too long causing spin-out
+- Common Errors: Watch for "jumping" (extending too early/aggressively) or sliding vs rotating
+- Strike Quality: Divot should occur in front of ball position with compressed contact`;
   } else if (drillData.title.includes('Free Train')) {
     evaluationCriteria = `
 Specific Evaluation Focus for Free Train Session:
@@ -105,6 +119,8 @@ export function generateGreetingMessage(drillData: DrillData): string {
     ? "First, let's get your setup correct. Take a standard golf towel and tuck it securely under your lead armpit (left armpit for right-handed golfer). Apply enough pressure with your upper arm against your side to hold it in place. The towel should be secure but not restricting your movement."
     : drillData.title.includes("Stay Back") || drillData.title.includes("Early Extension")
     ? "First, let's establish your proper setup. Take your normal address position and become aware of the line created by your backside - this will be your reference point throughout the drill. Your weight should be balanced, and you should feel stable and athletic."
+    : drillData.title.includes("Lead Leg") || drillData.title.includes("Extension")
+    ? "First, let's practice the feeling without a club. Stand in your golf posture and simply extend or straighten your lead knee - notice how your hips open automatically. This is the core feeling we want in your swing. Now take your normal setup with a club and prepare to integrate this powerful move."
     : drillData.title.includes("Impact") 
     ? "First, let's get your setup position correct. Take your normal address position, then pre-set your perfect impact position by shifting your weight to your lead foot, opening your hips slightly toward the target, and pushing your hands ahead of the ball to create forward shaft lean."
     : drillData.title.includes("Free Train")

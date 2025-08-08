@@ -63,6 +63,26 @@ export const stayBackDrillData: DrillData = {
   ]
 };
 
+export const leadLegDrillData: DrillData = {
+  title: "Lead Leg Extension & Rotation Drill",
+  videoId: "xstu2-7Anb0",
+  instructions: [
+    "Isolate the Feeling: Stand in golf posture without a club and practice extending/straightening your lead knee (left knee for righty) - notice how your hips open automatically",
+    "Transition Timing: Make your normal backswing, then as hands reach hip height in downswing, begin extending the lead knee",
+    "Coordinate Release: As the lead leg extends, allow your stored wrist angle (lag) to release naturally - the extension prevents getting too low",
+    "Full Motion Practice: Start with slow swings feeling the sequence - backswing, slight squat in transition, then powerful push/extension of lead leg",
+    "Athletic Finish: The leg extension should pull your hips, torso, and arms through to a tall, balanced position on your lead side"
+  ],
+  tips: [
+    "This drill trains the correct kinematic sequence where lower body drives the swing",
+    "Great execution = lead leg moves from flexed to straight/nearly straight at impact",
+    "OK execution = attempted extension but timing slightly off (too early or late)",
+    "Poor execution = lateral hip slide instead of rotation, or knee stays flexed too long",
+    "The extension creates automatic hip opening and prevents fat/thin shots",
+    "Focus on using ground forces by pushing off the lead leg for maximum power"
+  ]
+};
+
 export const freeTrainData: DrillData = {
   title: "Free Train Session",
   videoId: "",
@@ -87,6 +107,7 @@ export const availableDrills = {
   towelDrill: towelDrillData,
   impactDrill: impactDrillData,
   stayBackDrill: stayBackDrillData,
+  leadLegDrill: leadLegDrillData,
   freeTrainDrill: freeTrainData,
 };
 
