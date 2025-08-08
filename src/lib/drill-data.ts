@@ -84,10 +84,10 @@ export const freeTrainData: DrillData = {
 };
 
 export const availableDrills = {
-  freeTrainDrill: freeTrainData,
   towelDrill: towelDrillData,
   impactDrill: impactDrillData,
   stayBackDrill: stayBackDrillData,
+  freeTrainDrill: freeTrainData,
 };
 
 export type DrillKey = keyof typeof availableDrills;
