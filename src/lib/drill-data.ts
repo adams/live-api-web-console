@@ -67,19 +67,19 @@ export const leadLegDrillData: DrillData = {
   title: "Lead Leg Extension & Rotation Drill",
   videoId: "xstu2-7Anb0",
   instructions: [
-    "Isolate the Feeling: Stand in golf posture without a club and practice extending/straightening your lead knee (left knee for righty) - notice how your hips open automatically",
-    "Transition Timing: Make your normal backswing, then as hands reach hip height in downswing, begin extending the lead knee",
-    "Coordinate Release: As the lead leg extends, allow your stored wrist angle (lag) to release naturally - the extension prevents getting too low",
-    "Full Motion Practice: Start with slow swings feeling the sequence - backswing, slight squat in transition, then powerful push/extension of lead leg",
-    "Athletic Finish: The leg extension should pull your hips, torso, and arms through to a tall, balanced position on your lead side"
+    "Isolate the Feeling: Stand in normal golf posture without a club, then extend/straighten your lead knee (left for righty) - notice how hips open automatically. This is the core feeling to replicate",
+    "Integrate into Swing: Make your normal backswing, then as you transition to downswing, the key move begins when hands reach hip height",
+    "Hip Height Trigger: When hands reach hip height, start extending the lead knee while releasing stored wrist angle (lag) - this prevents getting too low and striking ground early",
+    "Execute Full Motion: Practice with slow swings first - feel the sequence of backswing, slight squat in transition, then powerful push/extension of lead leg",
+    "Athletic Sequence: The leg extension pulls your hips, torso, and arms through the ball to a tall, balanced finish on your lead side"
   ],
   tips: [
-    "This drill trains the correct kinematic sequence where lower body drives the swing",
-    "Great execution = lead leg moves from flexed to straight/nearly straight at impact",
-    "OK execution = attempted extension but timing slightly off (too early or late)",
-    "Poor execution = lateral hip slide instead of rotation, or knee stays flexed too long",
-    "The extension creates automatic hip opening and prevents fat/thin shots",
-    "Focus on using ground forces by pushing off the lead leg for maximum power"
+    "Great execution = lead leg moves from flexed in early downswing to straight/nearly straight at impact, hips visibly open, compressed solid strike",
+    "OK execution = attempted extension but timing slightly off, contact improves but may be thin, hip rotation better but not fully cleared",
+    "Poor execution = lateral hip slide preventing rotation, or knee stays flexed causing spin-out, or jumping from extending too early/aggressively",
+    "The divot should occur in front of ball's original position with compressed contact",
+    "This move creates automatic hip opening and maximizes power through ground forces",
+    "Best evaluated with Face-On or DTL video to see leg extension and hip rotation clearly"
   ]
 };
 
