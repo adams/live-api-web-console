@@ -19,6 +19,8 @@ import cn from "classnames";
 import { memo, ReactNode, RefObject, useEffect, useRef, useState } from "react";
 import { useLiveAPIContext } from "../../contexts/LiveAPIContext";
 import { useWebcam } from "../../hooks/use-webcam";
+import { useScreenCapture } from "../../hooks/use-screen-capture";
+import { UseMediaStreamResult } from "../../hooks/use-media-stream-mux";
 import { AudioRecorder } from "../../lib/audio-recorder";
 import AudioPulse from "../audio-pulse/AudioPulse";
 import "./control-tray.scss";
@@ -46,11 +48,19 @@ type MediaStreamButtonProps = {
 const MediaStreamButton = memo(
   ({ isStreaming, onIcon, offIcon, start, stop }: MediaStreamButtonProps) =>
     isStreaming ? (
-      <button className="action-button" onClick={stop}>
+      <button 
+        className="action-button" 
+        onClick={stop}
+        title="Stop screen sharing"
+      >
         <span className="material-symbols-outlined">{onIcon}</span>
       </button>
     ) : (
-      <button className="action-button" onClick={start}>
+      <button 
+        className="action-button" 
+        onClick={start}
+        title="Share screen"
+      >
         <span className="material-symbols-outlined">{offIcon}</span>
       </button>
     )
@@ -64,14 +74,16 @@ function ControlTray({
   enableEditingSettings,
 }: ControlTrayProps) {
   const webcam = useWebcam();
+  const screenCapture = useScreenCapture();
+  const videoStreams = [webcam, screenCapture];
   const [activeVideoStream, setActiveVideoStream] =
     useState<MediaStream | null>(null);
   const [inVolume, setInVolume] = useState(0);
   const [audioRecorder] = useState(() => new AudioRecorder());
   const [muted, setMuted] = useState(true);
   
-  // Check if camera is ready for session (mic optional for golf detection)
-  const isReadyForSession = webcam.isStreaming;
+  // Check if camera or screen share is ready for session (mic optional for golf detection)
+  const isReadyForSession = webcam.isStreaming || screenCapture.isStreaming;
   const renderCanvasRef = useRef<HTMLCanvasElement>(null);
   const connectButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -146,15 +158,26 @@ function ControlTray({
   }, [connected, activeVideoStream, client, videoRef]);
 
   // Handler for starting/stopping webcam
-  const toggleWebcam = async () => {
-    if (webcam.isStreaming) {
-      webcam.stop();
-      setActiveVideoStream(null);
-      onVideoStreamChange(null);
-    } else {
-      const mediaStream = await webcam.start();
+  // Handler for switching between video streams (webcam/screen share)
+  const changeStreams = (next?: UseMediaStreamResult) => async () => {
+    if (next) {
+      const mediaStream = await next.start();
       setActiveVideoStream(mediaStream);
       onVideoStreamChange(mediaStream);
+    } else {
+      setActiveVideoStream(null);
+      onVideoStreamChange(null);
+    }
+
+    // Stop other streams when one is activated
+    videoStreams.filter((msr) => msr !== next).forEach((msr) => msr.stop());
+  };
+
+  const toggleWebcam = async () => {
+    if (webcam.isStreaming) {
+      await changeStreams()();
+    } else {
+      await changeStreams(webcam)();
     }
   };
   
@@ -167,9 +190,9 @@ function ControlTray({
   
   const handleDisconnect = async () => {
     await disconnect();
-    // Turn off camera and mic when session ends
+    // Turn off camera/screen share and mic when session ends
     setMuted(true);
-    webcam.stop();
+    videoStreams.forEach((stream) => stream.stop());
     setActiveVideoStream(null);
     onVideoStreamChange(null);
   };
@@ -198,24 +221,30 @@ function ControlTray({
         </button>
 
         {supportsVideo && (
-          <button 
-            className={cn("action-button video-button", {
-              "active": webcam.isStreaming,
-              "inactive": !webcam.isStreaming
-            })}
-            onClick={webcam.isStreaming ? () => {
-              webcam.stop();
-              setActiveVideoStream(null);
-              onVideoStreamChange(null);
-            } : toggleWebcam}
-            title={webcam.isStreaming ? "Disable camera" : "Enable camera"}
-          >
-            {webcam.isStreaming ? (
-              <span className="material-symbols-outlined filled">videocam</span>
-            ) : (
-              <span className="material-symbols-outlined filled">videocam_off</span>
-            )}
-          </button>
+          <>
+            <button 
+              className={cn("action-button video-button", {
+                "active": webcam.isStreaming,
+                "inactive": !webcam.isStreaming
+              })}
+              onClick={toggleWebcam}
+              title={webcam.isStreaming ? "Disable camera" : "Enable camera"}
+            >
+              {webcam.isStreaming ? (
+                <span className="material-symbols-outlined filled">videocam</span>
+              ) : (
+                <span className="material-symbols-outlined filled">videocam_off</span>
+              )}
+            </button>
+            
+            <MediaStreamButton
+              isStreaming={screenCapture.isStreaming}
+              start={changeStreams(screenCapture)}
+              stop={changeStreams()}
+              onIcon="cancel_presentation"
+              offIcon="present_to_all"
+            />
+          </>
         )}
         {children}
       </nav>
