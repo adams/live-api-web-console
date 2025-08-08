@@ -39,6 +39,21 @@ Specific Evaluation Focus for The Stay Back Hip Rotation Drill:
   • POOR: Hips still move forward off starting line toward ball, golfer feels crowded/stuck at impact
 - Ball Flight Impact: Note elimination of blocks, pushes, and hooks associated with Early Extension
 - Down-the-Line View: This drill is best evaluated from down-the-line camera angle to see hip movement clearly`;
+  } else if (drillData.title.includes('Free Train')) {
+    evaluationCriteria = `
+Specific Evaluation Focus for Free Train Session:
+- Comprehensive Golf Analysis: Evaluate any aspect of golf technique shown in the video
+- Setup Assessment: Analyze posture, alignment, ball position, grip, and stance
+- Swing Mechanics: Observe backswing plane, transition, downswing path, impact position, and follow-through
+- Short Game Analysis: Provide feedback on putting stroke, chipping technique, or pitching mechanics
+- Fundamental Evaluation: Address basic golf principles like balance, tempo, and coordination
+- Adaptive Coaching: Adjust feedback based on what the user is practicing (full swing, putting, chipping, etc.)
+- Real-time Feedback: Provide immediate, actionable advice based on what's observed
+- Question Response: Answer specific technical questions about swing thoughts or mechanics
+- General Categories:
+  • EXCELLENT: Demonstrates solid fundamentals and good technique for the skill being practiced
+  • GOOD: Shows understanding of basics with minor areas for improvement
+  • NEEDS WORK: Has fundamental issues that should be addressed for improvement`;
   } else if (drillData.title.includes('Impact')) {
     evaluationCriteria = `
 Specific Evaluation Focus for Impact Drill:
@@ -92,11 +107,17 @@ export function generateGreetingMessage(drillData: DrillData): string {
     ? "First, let's establish your proper setup. Take your normal address position and become aware of the line created by your backside - this will be your reference point throughout the drill. Your weight should be balanced, and you should feel stable and athletic."
     : drillData.title.includes("Impact") 
     ? "First, let's get your setup position correct. Take your normal address position, then pre-set your perfect impact position by shifting your weight to your lead foot, opening your hips slightly toward the target, and pushing your hands ahead of the ball to create forward shaft lean."
+    : drillData.title.includes("Free Train")
+    ? "This is your open practice session! Show me whatever you're working on - your setup, full swing, putting stroke, chipping, or any golf movement. I'm here to provide real-time coaching feedback on anything you want to improve."
     : "Let's start by getting your setup position correct for this drill.";
+
+  const greetingEnd = drillData.title.includes("Free Train")
+    ? "I can help with any aspect of your golf game - full swing mechanics, short game technique, putting stroke, or fundamental skills. Just show me what you're working on and say 'How does that look?' for detailed feedback, or ask me specific questions about technique, swing thoughts, or any golf fundamentals you want to improve."
+    : "Once you've set up according to these instructions, please say \"How does that look?\" and I'll evaluate your setup position based on what I can see in your video. I want to make sure everything looks correct before we move on to practicing the actual drill movements. This setup phase is crucial for the drill's success, so we'll take our time to get it right.";
 
   return `Hello! I'm your golf instructor and I'm ready to help you with ${drillData.title}. I'm receiving your audio and video feed and will analyze your form as we proceed.
 
 ${setupInstructions}
 
-Once you've set up according to these instructions, please say "How does that look?" and I'll evaluate your setup position based on what I can see in your video. I want to make sure everything looks correct before we move on to practicing the actual drill movements. This setup phase is crucial for the drill's success, so we'll take our time to get it right.`;
+${greetingEnd}`;
 }

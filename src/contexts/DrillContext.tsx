@@ -17,7 +17,7 @@ interface DrillProviderProps {
 }
 
 export function DrillProvider({ children }: DrillProviderProps) {
-  const [currentDrillKey, setCurrentDrillKey] = useState<DrillKey>('towelDrill');
+  const [currentDrillKey, setCurrentDrillKey] = useState<DrillKey>('freeTrainDrill');
   const [systemInstruction, setSystemInstruction] = useState<string>(getDefaultSystemInstruction());
   const { setConfig, client } = useLiveAPIContext();
   

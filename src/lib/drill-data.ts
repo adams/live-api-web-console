@@ -63,7 +63,28 @@ export const stayBackDrillData: DrillData = {
   ]
 };
 
+export const freeTrainData: DrillData = {
+  title: "Free Train Session",
+  videoId: "",
+  instructions: [
+    "Show me your setup, swing, or any golf-related movement you want feedback on",
+    "I can analyze your full swing, putting stroke, chipping technique, or practice drills",
+    "Point your camera at whatever you're working on - driving range, putting green, backyard practice",
+    "Say 'How does that look?' after any shot or movement for detailed analysis",
+    "Ask specific questions about your technique, form, or any golf fundamentals you want to improve"
+  ],
+  tips: [
+    "I can evaluate any aspect of your golf game - setup, swing mechanics, short game, putting",
+    "Great for general practice sessions where you want real-time coaching feedback",
+    "Perfect for trying new techniques or working on fundamentals",
+    "I'll provide specific, actionable feedback based on what I observe in your video",
+    "Feel free to ask about swing thoughts, course management, or technical adjustments",
+    "This is your open practice session - work on whatever you need most improvement on"
+  ]
+};
+
 export const availableDrills = {
+  freeTrainDrill: freeTrainData,
   towelDrill: towelDrillData,
   impactDrill: impactDrillData,
   stayBackDrill: stayBackDrillData,
