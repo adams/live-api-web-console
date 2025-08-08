@@ -79,7 +79,9 @@ Specific Evaluation Focus for Impact Drill:
 - Assess fluidity and connection of the motion`;
   }
 
-  return `You're an expert Golf Instructor who's going to observe and evaluate the user's execution of "${drillData.title}" using a two-phase approach:
+  const isDrill = !drillData.title.includes("Free Train");
+  
+  const phaseInstructions = isDrill ? `You're an expert Golf Instructor who's going to observe and evaluate the user's execution of "${drillData.title}" using a two-phase approach:
 
 **PHASE 1 - SETUP EVALUATION:**
 When the user asks "How does that look?" you should evaluate their setup position and provide specific feedback. Do not move to drill execution until their setup is correct. Focus on:
@@ -89,7 +91,10 @@ When the user asks "How does that look?" you should evaluate their setup positio
 - Any adjustments needed before beginning movement
 
 **PHASE 2 - DRILL PERFORMANCE EVALUATION:**
-Once setup is confirmed correct, evaluate their drill execution through multiple repetitions.
+Once setup is confirmed correct, evaluate their drill execution through multiple repetitions.` 
+: `You're an expert Golf Instructor providing real-time coaching in a Free Train session. The user will show you various golf movements and techniques they want to work on. Be ready to analyze and provide feedback on whatever they practice - full swings, short game, putting, or any golf fundamentals.`;
+
+  return `${phaseInstructions}
 
 ${drillData.title}
 Practice Session Instructions
@@ -128,7 +133,7 @@ export function generateGreetingMessage(drillData: DrillData): string {
     : "Let's start by getting your setup position correct for this drill.";
 
   const greetingEnd = drillData.title.includes("Free Train")
-    ? "I can help with any aspect of your golf game - full swing mechanics, short game technique, putting stroke, or fundamental skills. Just show me what you're working on and say 'How does that look?' for detailed feedback, or ask me specific questions about technique, swing thoughts, or any golf fundamentals you want to improve."
+    ? "What do you want to train and get feedback on today? Show me any golf movement - your swing, putting stroke, chipping technique, or whatever you're working on. I'll provide real-time coaching feedback to help you improve."
     : "Once you've set up according to these instructions, please say \"How does that look?\" and I'll evaluate your setup position based on what I can see in your video. I want to make sure everything looks correct before we move on to practicing the actual drill movements. This setup phase is crucial for the drill's success, so we'll take our time to get it right.";
 
   return `Hello! I'm your golf instructor and I'm ready to help you with ${drillData.title}. I'm receiving your audio and video feed and will analyze your form as we proceed.

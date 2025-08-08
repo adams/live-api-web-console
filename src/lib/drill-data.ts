@@ -87,11 +87,11 @@ export const freeTrainData: DrillData = {
   title: "Free Train Session",
   videoId: "",
   instructions: [
-    "Show me your setup, swing, or any golf-related movement you want feedback on",
-    "I can analyze your full swing, putting stroke, chipping technique, or practice drills",
-    "Point your camera at whatever you're working on - driving range, putting green, backyard practice",
-    "Say 'How does that look?' after any shot or movement for detailed analysis",
-    "Ask specific questions about your technique, form, or any golf fundamentals you want to improve"
+    "Tell me what you want to work on - swing mechanics, short game, putting, or any golf skill",
+    "Show me your technique and I'll provide real-time coaching feedback",
+    "I can analyze full swings, putting strokes, chipping, pitching, or any practice drill",
+    "Point your camera at whatever you're practicing - driving range, putting green, backyard",
+    "Feel free to ask questions about technique, swing thoughts, or fundamentals as you practice"
   ],
   tips: [
     "I can evaluate any aspect of your golf game - setup, swing mechanics, short game, putting",
