@@ -151,8 +151,24 @@ body {
   .main-app-area {
     display: flex;
     flex: 1;
-    align-items: center;
-    justify-content: center;
+    align-items: stretch;
+    gap: 1rem;
+    padding: 1rem;
+    height: 100%;
+    
+    .golf-side-panel {
+      width: 400px;
+      min-width: 400px;
+      flex-shrink: 0;
+    }
+    
+    .video-area {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+    }
   }
 
   .function-call {

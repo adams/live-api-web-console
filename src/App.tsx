@@ -18,7 +18,7 @@ import { useRef, useState } from "react";
 import "./App.scss";
 import { LiveAPIProvider } from "./contexts/LiveAPIContext";
 import SidePanel from "./components/side-panel/SidePanel";
-import { Altair } from "./components/altair/Altair";
+import { GolfDataDisplay } from "./components/golf-data-display/GolfDataDisplay";
 import ControlTray from "./components/control-tray/ControlTray";
 import cn from "classnames";
 import { LiveClientOptions } from "./types";
@@ -46,23 +46,24 @@ function App() {
           <SidePanel />
           <main>
             <div className="main-app-area">
-              {/* APP goes here */}
-              <Altair />
-              <video
-                className={cn("stream", {
-                  hidden: !videoRef.current || !videoStream,
-                })}
-                ref={videoRef}
-                autoPlay
-                playsInline
-              />
+              <div className="golf-side-panel">
+                <GolfDataDisplay />
+              </div>
+              <div className="video-area">
+                <video
+                  className={cn("stream", {
+                    hidden: !videoRef.current || !videoStream,
+                  })}
+                  ref={videoRef}
+                  autoPlay
+                  playsInline
+                />
+              </div>
             </div>
 
             <ControlTray
               videoRef={videoRef}
-              supportsVideo={true}
               onVideoStreamChange={setVideoStream}
-              enableEditingSettings={true}
             >
               {/* put your own buttons here */}
             </ControlTray>

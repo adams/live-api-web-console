@@ -29,9 +29,7 @@ import {
 } from "@google/genai";
 
 import { EventEmitter } from "eventemitter3";
-import { difference } from "lodash";
 import { LiveClientOptions, StreamingLog } from "../types";
-import { base64ToArrayBuffer } from "./utils";
 
 /**
  * Event types that can be emitted by the MultimodalLiveClient.
@@ -208,29 +206,7 @@ export class GenAILiveClient extends EventEmitter<LiveClientEventTypes> {
       if ("modelTurn" in serverContent) {
         let parts: Part[] = serverContent.modelTurn?.parts || [];
 
-        // when its audio that is returned for modelTurn
-        const audioParts = parts.filter(
-          (p) => p.inlineData && p.inlineData.mimeType?.startsWith("audio/pcm")
-        );
-        const base64s = audioParts.map((p) => p.inlineData?.data);
-
-        // strip the audio parts out of the modelTurn
-        const otherParts = difference(parts, audioParts);
-        // console.log("otherParts", otherParts);
-
-        base64s.forEach((b64) => {
-          if (b64) {
-            const data = base64ToArrayBuffer(b64);
-            this.emit("audio", data);
-            this.log(`server.audio`, `buffer (${data.byteLength})`);
-          }
-        });
-        if (!otherParts.length) {
-          return;
-        }
-
-        parts = otherParts;
-
+        // Skip audio processing entirely for golf analyzer
         const content: { modelTurn: Content } = { modelTurn: { parts } };
         this.emit("content", content);
         this.log(`server.content`, message);
